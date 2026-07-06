@@ -6,6 +6,6 @@ export const brand = {
 marketplace: {
     shopee: "https://id.shp.ee/XcwACNEN",
     tokopedia: "https://vt.tokopedia.com/t/ZS9MNvdrAPqPb-x6FjP/",
-    whatsapp: "https://wa.me/6288135939627",
+    whatsapp: "https://wa.me/628135939627",
 },
 };

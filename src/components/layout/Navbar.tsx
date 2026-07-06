@@ -61,9 +61,9 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:block">
-          <Button href={brand.marketplace.shopee} target="_blank">
-            Buy Now
-          </Button>
+          <Button href={brand.marketplace.tokopedia} target="_blank">
+  Buy Now
+</Button>
         </div>
 
         <button
@@ -88,9 +88,9 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <Button href={brand.marketplace.shopee} target="_blank" className="mt-3 w-full">
-              Buy Now
-            </Button>
+            <Button href={brand.marketplace.tokopedia} target="_blank">
+  Buy Now
+</Button>
           </Container>
         </div>
       )}

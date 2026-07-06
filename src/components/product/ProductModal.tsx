@@ -97,9 +97,9 @@ export default function ProductModal({
 
           <p className="text-lg font-medium text-accent">{formatIDR(product.price)}</p>
 
-          <Button href={brand.marketplace.shopee} target="_blank" className="mt-2 w-full">
-            Buy on Shopee
-          </Button>
+          <Button href={brand.marketplace.tokopedia} target="_blank" className="mt-2 w-full">
+  Buy on Tokopedia
+</Button>
         </div>
       </div>
     </div>
