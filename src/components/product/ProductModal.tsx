@@ -37,11 +37,11 @@ export default function ProductModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
-      onClick={onClose}
-    >
+  className="fixed inset-0 z-[100] overflow-y-auto bg-black/60 p-4"
+  onClick={onClose}
+>
       <div
-        className="relative grid w-full max-w-3xl grid-cols-1 overflow-hidden rounded-xl bg-white shadow-[var(--shadow-card)] md:grid-cols-2"
+  className="relative mx-auto my-8 grid w-full max-w-3xl grid-cols-1 overflow-hidden rounded-xl bg-white shadow-[var(--shadow-card)] md:grid-cols-2"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -76,13 +76,13 @@ export default function ProductModal({
               hover ? "opacity-100" : "opacity-0"
             }`}
           />
-          <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-3 py-1 text-[10px] uppercase tracking-[0.15em] text-white">
-            Hover to see swatch
-          </span>
+         <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-3 py-1 text-[10px] uppercase tracking-[0.15em] text-white">
+  Product Preview
+</span>
         </div>
 
         {/* Product info */}
-        <div className="flex flex-col gap-4 p-8">
+        <div className="flex max-h-[85vh] flex-col gap-4 overflow-y-auto p-8">
           <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary">
             Premium Lip Care
           </span>

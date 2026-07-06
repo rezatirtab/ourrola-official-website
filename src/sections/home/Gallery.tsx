@@ -15,7 +15,7 @@ export default function Gallery() {
       <Container className="flex flex-col gap-14">
         <SectionTitle eyebrow="Gallery" title="Product, Packaging & Lifestyle" />
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:auto-rows-[220px]">
+        <div className="grid grid-cols-2 auto-rows-[180px] gap-4 sm:grid-cols-4 sm:auto-rows-[220px]">
           {gallery.map((item) => (
             <div
               key={item.id}
