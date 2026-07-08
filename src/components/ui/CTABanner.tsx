@@ -20,7 +20,8 @@ export default function CTABanner() {
           Elevate Your Lip Care Routine with OURROLA
         </h2>
         <div className="flex flex-wrap justify-center gap-4">
-          <Button href="/products">Shop Now</Button>
+          <Button href={brand.marketplace.tokopedia} target="_blank">
+            Shop Now</Button>
           <Button
             href={brand.marketplace.whatsapp}
             variant="secondary"
