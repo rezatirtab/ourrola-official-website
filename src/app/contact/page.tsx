@@ -5,7 +5,9 @@ import Container from "@/components/ui/Container";
 import { social } from "@/data/social";
 
 export const metadata: Metadata = {
-  title: "Contact — OURROLA",
+  title: "Contact",
+  alternates: { canonical: "/contact" },
+
   description:
     "Get in touch with OURROLA via WhatsApp, Instagram, TikTok, or email for questions, shade consultations, or partnership inquiries.",
 };

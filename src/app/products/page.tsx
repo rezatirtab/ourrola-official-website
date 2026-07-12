@@ -3,16 +3,45 @@ import Container from "@/components/ui/Container";
 import ProductGrid from "@/components/product/ProductGrid";
 import CTABanner from "@/components/ui/CTABanner";
 import { products } from "@/data/products";
+import { brand } from "@/data/brand";
 
 export const metadata: Metadata = {
-  title: "Products — OURROLA",
+  title: "Products",
+  alternates: { canonical: "/products" },
   description:
     "Shop OURROLA Lip Bomber — BPOM-approved lip treatment with Plumpgasm Heat + Ice Technology and Hyaluronic Acid for an instant, glossy plump. Available in Venus (Pink Nude) and Saturn (Brick Red).",
 };
 
 export default function ProductsPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: products.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Product",
+        name: product.name,
+        description: product.description,
+        image: `https://www.ourrola.com${product.image}`,
+        brand: { "@type": "Brand", name: brand.name },
+        offers: {
+          "@type": "Offer",
+          url: brand.marketplace.tokopedia,
+          priceCurrency: "IDR",
+          price: product.price,
+          availability: "https://schema.org/InStock",
+        },
+      },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <section className="bg-surface py-20 md:py-24">
         <Container className="flex flex-col items-center gap-4 text-center">
           <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary">

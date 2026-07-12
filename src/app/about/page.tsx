@@ -5,7 +5,8 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import CTABanner from "@/components/ui/CTABanner";
 
 export const metadata: Metadata = {
-  title: "About — OURROLA",
+  title: "About",
+  alternates: { canonical: "/about" },
   description:
     "OURROLA is a BPOM-approved, skincare-infused lip treatment brand — built on barrier-repair technology and accessible pricing for Gen Z and young professionals.",
 };
