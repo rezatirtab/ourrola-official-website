@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Product } from "@/types/product";
 import { formatIDR } from "@/utils/format";
 import Button from "@/components/ui/Button";
@@ -15,7 +15,13 @@ export default function ProductModal({
   product: Product;
   onClose: () => void;
 }) {
-  const [hover, setHover] = useState(false);
+  // Add/remove images here — currently uses the 3 photos every product
+  // already has (detail, shade, swatch). Add a 4th field to the Product
+  // type + data if you get more photos later, then add it to this array.
+  const images = [product.image, product.shadeImage, product.swatchImage];
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Close on Escape key
   useEffect(() => {
@@ -35,54 +41,90 @@ export default function ProductModal({
     };
   }, []);
 
+  const scrollToIndex = (index: number) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    container.scrollTo({ left: index * container.clientWidth, behavior: "smooth" });
+  };
+
+  const handleScroll = () => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const index = Math.round(container.scrollLeft / container.clientWidth);
+    setActiveIndex(index);
+  };
+
   return (
     <div
-  className="fixed inset-0 z-[100] overflow-y-auto bg-black/60 p-4"
-  onClick={onClose}
->
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
+      onClick={onClose}
+    >
       <div
-  className="relative mx-auto my-8 grid w-full max-w-3xl grid-cols-1 overflow-hidden rounded-xl bg-white shadow-[var(--shadow-card)] md:grid-cols-2"
+        className="relative grid w-full max-w-3xl grid-cols-1 overflow-y-auto rounded-xl bg-white shadow-[var(--shadow-card)] md:grid-cols-2"
+        style={{ maxHeight: "90vh" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-text-primary transition-colors hover:bg-primary hover:text-white"
+          className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-text-primary transition-colors hover:bg-primary hover:text-white"
         >
           <X size={18} />
         </button>
 
-        {/* Image - hover to see swatch */}
-        <div
-          className="relative aspect-square w-full bg-surface md:aspect-auto"
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-        >
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={`object-cover transition-opacity duration-500 ${
-              hover ? "opacity-0" : "opacity-100"
-            }`}
-          />
-          <Image
-            src={product.swatchImage}
-            alt={`Swatch ${product.name}`}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={`object-cover transition-opacity duration-500 ${
-              hover ? "opacity-100" : "opacity-0"
-            }`}
-          />
-         <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-3 py-1 text-[10px] uppercase tracking-[0.15em] text-white">
-  Product Preview
-</span>
+        {/* Image carousel - swipeable on mobile, arrows on desktop */}
+        <div className="relative aspect-square w-full bg-surface md:aspect-auto">
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="scrollbar-hide flex h-full w-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
+          >
+            {images.map((src, i) => (
+              <div key={i} className="relative h-full w-full shrink-0 snap-center">
+                <Image
+                  src={src}
+                  alt={`${product.name} photo ${i + 1}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Prev/next arrows - desktop only */}
+          <button
+            onClick={() => scrollToIndex(Math.max(activeIndex - 1, 0))}
+            aria-label="Previous photo"
+            className="absolute left-3 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full bg-white/80 p-2 text-text-primary transition-colors hover:bg-white md:flex"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            onClick={() => scrollToIndex(Math.min(activeIndex + 1, images.length - 1))}
+            aria-label="Next photo"
+            className="absolute right-3 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full bg-white/80 p-2 text-text-primary transition-colors hover:bg-white md:flex"
+          >
+            <ChevronRight size={18} />
+          </button>
+
+          {/* Dot indicators */}
+          <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToIndex(i)}
+                aria-label={`Go to photo ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === activeIndex ? "w-6 bg-primary" : "w-1.5 bg-white/80"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Product info */}
-        <div className="flex max-h-[85vh] flex-col gap-4 overflow-y-auto p-8">
+        <div className="flex flex-col gap-4 p-8">
           <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary">
             Premium Lip Care
           </span>
@@ -97,9 +139,36 @@ export default function ProductModal({
 
           <p className="text-lg font-medium text-accent">{formatIDR(product.price)}</p>
 
-          <Button href={brand.marketplace.tokopedia} target="_blank" className="mt-2 w-full">
-  Buy on Tokopedia
-</Button>
+          {/* Buy buttons - Tokopedia highlighted as best deal */}
+          <div className="mt-2 flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-white">
+                Best Deal
+              </span>
+              <span className="text-xs text-text-secondary">Lowest price, official store</span>
+            </div>
+            <Button href={brand.marketplace.tokopedia} target="_blank" className="w-full">
+              Buy on Tokopedia
+            </Button>
+            <div className="flex gap-2">
+              <Button
+                href={brand.marketplace.shopee}
+                target="_blank"
+                variant="secondary"
+                className="flex-1"
+              >
+                Shopee
+              </Button>
+              <Button
+                href={brand.marketplace.tiktokShop}
+                target="_blank"
+                variant="secondary"
+                className="flex-1"
+              >
+                TikTok Shop
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
