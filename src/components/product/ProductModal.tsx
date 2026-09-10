@@ -36,7 +36,6 @@ export default function ProductModal({
     sharedImages.swatchComparison,
     product.applyImage,
     product.swatchImage,
-    product.lifestyleImage,
     sharedImages.ingredients,
     sharedImages.certifications,
   ];
@@ -91,7 +90,7 @@ export default function ProductModal({
           <X size={18} />
         </button>
 
-        <div className="relative aspect-square w-full bg-surface md:aspect-auto">
+        <div className="relative aspect-square w-full bg-surface">
           <div
             ref={scrollRef}
             onScroll={handleScroll}
@@ -104,7 +103,7 @@ export default function ProductModal({
                   alt={`${product.name} photo ${i + 1}`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
             ))}
