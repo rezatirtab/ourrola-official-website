@@ -8,5 +8,8 @@ export type Product = {
   image: string;
   shadeImage: string;
   swatchImage: string;
+ lifestyleImage: string;
+  closeupImage: string;
+  applyImage: string;
   bestSeller?: boolean;
 };

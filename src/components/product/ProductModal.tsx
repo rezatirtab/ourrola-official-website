@@ -8,6 +8,15 @@ import { formatIDR } from "@/utils/format";
 import Button from "@/components/ui/Button";
 import { brand } from "@/data/brand";
 
+// Shared across every product — not shade-specific, so they live here once
+// instead of being repeated in every product's data entry.
+const sharedImages = {
+  hero: "/images/products/shared-hero.png",
+  swatchComparison: "/images/products/shared-swatch-comparison.png",
+  ingredients: "/images/products/shared-ingredients.png",
+  certifications: "/images/products/shared-certifications.png",
+};
+
 export default function ProductModal({
   product,
   onClose,
@@ -15,15 +24,26 @@ export default function ProductModal({
   product: Product;
   onClose: () => void;
 }) {
-  // Add/remove images here — currently uses the 3 photos every product
-  // already has (detail, shade, swatch). Add a 4th field to the Product
-  // type + data if you get more photos later, then add it to this array.
-  const images = [product.image, product.shadeImage, product.swatchImage];
+  // Carousel order, designed as a mini story:
+  // 1. Brand/hero shot -> 2. Aspirational close-up (shade-specific) ->
+  // 3. Product detail -> 4. Shade comparison across skin tones ->
+  // 5. Before/after application (shade-specific) -> 6. Swatch -> 7. Lifestyle ->
+  // 8. Ingredients -> 9. Certifications (trust closer)
+  const images = [
+    sharedImages.hero,
+    product.closeupImage,
+    product.image,
+    sharedImages.swatchComparison,
+    product.applyImage,
+    product.swatchImage,
+    product.lifestyleImage,
+    sharedImages.ingredients,
+    sharedImages.certifications,
+  ];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -32,7 +52,6 @@ export default function ProductModal({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  // Lock background scroll while modal is open
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -72,7 +91,6 @@ export default function ProductModal({
           <X size={18} />
         </button>
 
-        {/* Image carousel - swipeable on mobile, arrows on desktop */}
         <div className="relative aspect-square w-full bg-surface md:aspect-auto">
           <div
             ref={scrollRef}
@@ -92,7 +110,6 @@ export default function ProductModal({
             ))}
           </div>
 
-          {/* Prev/next arrows - desktop only */}
           <button
             onClick={() => scrollToIndex(Math.max(activeIndex - 1, 0))}
             aria-label="Previous photo"
@@ -108,7 +125,6 @@ export default function ProductModal({
             <ChevronRight size={18} />
           </button>
 
-          {/* Dot indicators */}
           <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
             {images.map((_, i) => (
               <button
@@ -123,7 +139,6 @@ export default function ProductModal({
           </div>
         </div>
 
-        {/* Product info */}
         <div className="flex flex-col gap-4 p-8">
           <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary">
             Premium Lip Care
@@ -139,7 +154,6 @@ export default function ProductModal({
 
           <p className="text-lg font-medium text-accent">{formatIDR(product.price)}</p>
 
-          {/* Buy buttons - Tokopedia highlighted as best deal */}
           <div className="mt-2 flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <span className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-white">

@@ -13,6 +13,9 @@ export const products: Product[] = [
     image: "/images/products/venus-detail.jpg",
     shadeImage: "/images/products/venus-shade.jpg",
     swatchImage: "/images/products/venus-swatch.jpg",
+     lifestyleImage: "/images/products/venus-lifestyle.jpg",
+    closeupImage: "/images/products/venus-closeup.png",
+    applyImage: "/images/products/venus-apply.png",
     bestSeller: true,
   },
   {
@@ -27,6 +30,9 @@ export const products: Product[] = [
     image: "/images/products/saturn-detail.jpg",
     shadeImage: "/images/products/saturn-shade.jpg",
     swatchImage: "/images/products/saturn-swatch.jpg",
+        lifestyleImage: "/images/products/saturn-lifestyle.jpg",
+    closeupImage: "/images/products/saturn-closeup.png",
+    applyImage: "/images/products/saturn-apply.png",
     bestSeller: true,
   },
 ];
